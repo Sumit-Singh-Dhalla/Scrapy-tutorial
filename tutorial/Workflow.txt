@@ -1,0 +1,8 @@
+Step1: Given a URL e.g. "https://www.shouhiseikatu.metro.tokyo.lg.jp/torihiki/shobun/shobun230531.html"
+Step2: Start crawling from a given tag e.g. <div id="abc"> or <div class="abc">
+    - Now at this point we have to check that how to get this tag i.e. by id or class-name
+Step3:
+    - From this tag we have crawl each and every tag e.g. <h2>, <p>, <h1>
+    - also we have to make a symetry for each element.
+Step4:
+    - We need a schema to create a json object from each tag
