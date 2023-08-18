@@ -2,11 +2,12 @@
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-
+import pymongo
 from scrapy import signals
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
+from scrapy.exceptions import NotConfigured
 
 
 class TutorialSpiderMiddleware:
@@ -14,10 +15,18 @@ class TutorialSpiderMiddleware:
     # scrapy acts as if the spider middleware does not modify the
     # passed objects.
 
+    def __init__(self, db_settings=None):
+        self.db_setting = db_settings
+
     @classmethod
     def from_crawler(cls, crawler):
         # This method is used by Scrapy to create your spiders.
-        s = cls()
+        server, port, db = (crawler.settings.get("MONGODB_SERVER"), crawler.settings.get("MONGODB_PORT"),
+                            crawler.settings.get("MONGODB_DB"))
+        if not all([server, port, db]):
+            raise NotConfigured("DB Not Configured")
+        db_settings = {"server": server, "port": port, "db": db}
+        s = cls(db_settings)
         crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
         return s
 
@@ -54,6 +63,12 @@ class TutorialSpiderMiddleware:
 
     def spider_opened(self, spider):
         spider.logger.info("Spider opened: %s" % spider.name)
+        self.client = pymongo.MongoClient(self.db_setting['server'], self.db_setting['port'])
+        spider.db = self.client[self.db_setting['db']]
+        print(f"db connection created for details {self.db_setting}")
+
+    def spider_closed(self, spider):
+        self.client.close()
 
 
 class TutorialDownloaderMiddleware:

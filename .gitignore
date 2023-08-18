@@ -5,3 +5,8 @@ caa_site_detail.jsonl
 mlit_child.jsonl
 mlit_parent.jsonl
 all_data.txt
+build
+dbs
+project.egg-info
+tutorial/*/__pycache__/*.pyc
+tutorial/__pycache__/*.pyc

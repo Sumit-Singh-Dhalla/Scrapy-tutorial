@@ -1,0 +1,6 @@
+stacks:
+  default: scrapy:2.6-20220805
+project: 677977
+requirements:
+  file: requirements.txt
+

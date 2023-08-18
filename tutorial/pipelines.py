@@ -35,6 +35,7 @@ class MongoDBPipeline:
 
     @classmethod
     def from_crawler(cls, crawler):
+        
         return cls(
             server=crawler.settings.get('MONGODB_SERVER'),
             port=crawler.settings.get('MONGODB_PORT'),
@@ -59,8 +60,10 @@ class MongoDBPipeline:
             self.files[key].close()
 
     def process_item(self, item, spider):
+        print(f"from pipeline {item.get('type')}")
         if item.get("to_db", False) and item.get("type") in self.DB:
-            self.DB[item.get("type")].insert_one(dict(item))
+            print(f"going to write item in collection {self.DB[item.get('type')]}")
+            self.db[self.DB[item.get("type")]].insert_one(dict(item))
         if item.get("to_file", False) and item.get("type") in self.files:
             line = json.dumps(item, ensure_ascii=False) + "\n"
             self.files[item.get("type")].write(line)

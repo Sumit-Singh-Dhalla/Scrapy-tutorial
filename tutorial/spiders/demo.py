@@ -1,12 +1,15 @@
 import pdb
 import uuid
 
+import pymongo
 import scrapy
+from bson import ObjectId
+from scrapy.http import HtmlResponse
 from scrapy import signals
 from scrapy.exceptions import NotSupported
 import pandas as pd
 
-from tutorial.utils.dump_data import dump_file, get_table_data, get_headers
+from tutorial.utils.dump_data import get_table_data, get_headers, get_tag_text
 
 
 class CaaSpider(scrapy.Spider):
@@ -14,7 +17,8 @@ class CaaSpider(scrapy.Spider):
     crawled_urls = {}
     page = 1
     index = 1
-    start_urls = ["https://www.shouhiseikatu.metro.tokyo.lg.jp/torihiki/shobun/shobun230531.html"]
+    # start_urls = ["https://www.shouhiseikatu.metro.tokyo.lg.jp/torihiki/shobun/shobun230531.html"]
+    start_urls = ["https://www.google.com/"]
 
     # def start_requests(self):
         # urls = [
@@ -24,9 +28,22 @@ class CaaSpider(scrapy.Spider):
         #     yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response, **kwargs):
+        # html_content = response.text
+        client = pymongo.MongoClient("localhost", 27017)
+        db = client["cdl"]
+        obj = db["detail_html_content"].find_one({"_id": ObjectId("64c9e95b8f89349ad65cfb28")})
+        response = HtmlResponse(url=response.url, body=obj['content'], encoding='utf-8')
+        print(response)
         children = response.css('div#LayerContentsInner > *')
-        data = get_headers(children[21]),
-        print("here is the data->", data)
+        pdb.set_trace()
+        print(get_tag_text(children[11], "h1"))
+
+        # db["detail_html_content"].insert_one({"link": response.url, "content": html_content})
+        client.close()
+
+        # children = response.css('div#LayerContentsInner > *')
+        # data = get_headers(children[21]),
+        # print("here is the data->", data)
         # dump_file(response, "response1.json")
         # data = response.css("div#LayerContentsInner ::text").getall()
         # # pdb.set_trace()

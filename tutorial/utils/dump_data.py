@@ -1,15 +1,5 @@
 # import xmltojson
-import json
-import pdb
-
-from bs4 import BeautifulSoup
-import html_to_json
-
-
-def dump_file(response, file_name):
-    output_json = html_to_json.convert(response.text)
-    with open(file_name, "w") as file:
-        json.dump(output_json, file, ensure_ascii=False)
+import hashlib
 
 
 def get_table_data(response, table_type):
@@ -78,3 +68,9 @@ def get_headers(header_rows):
             rs = temp_rs.copy()
         data = next_data
     return [obj for obj in data if obj]
+
+
+def get_hash(input_str: str) -> str:
+    hash_object = hashlib.sha256()
+    hash_object.update(input_str.encode())
+    return hash_object.hexdigest()
