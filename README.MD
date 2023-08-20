@@ -8,3 +8,7 @@
     > pip install shub
     > shub login <your API Key>
     > shub deploy >your project ID>
+
+#### Startswith query regex
+    > {"link": {$regex: "<your_str>.*"}}
+        eg: {"link": {$regex: "https://www.shouhiseikatu.metro.tokyo.lg.jp/.*"}}

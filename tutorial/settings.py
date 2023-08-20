@@ -98,7 +98,6 @@ ITEM_PIPELINES = {
 }
 
 MONGODB_SERVER = "localhost"
-                 #'localhost'  # MongoDB server address
 MONGODB_PORT = 27017  # MongoDB server port
 MONGODB_DB = 'cdl'  # Name of the database
 MONGODB_COLLECTION = 'caa'  # Name of the collection

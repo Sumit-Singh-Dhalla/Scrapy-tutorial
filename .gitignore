@@ -10,3 +10,4 @@ dbs
 project.egg-info
 tutorial/*/__pycache__/*.pyc
 tutorial/__pycache__/*.pyc
+tutorial/spiders/__pycache__/caa_spider.cpython-310.pyc
